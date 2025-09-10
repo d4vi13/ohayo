@@ -6,7 +6,7 @@ MODULE_LICENSE("GPL");
 MODULE_AUTHOR("davi c. ribeiro");
 MODULE_DESCRIPTION("ohayo device driver");
 
-#define VENDOR_ID 0x1234
+#define VENDOR_ID 0x0000
 #define OHAYO_DEV_ID 0xcafe
 
 static int 
@@ -58,6 +58,7 @@ ohayo_init(void)
 static void __exit
 ohayo_exit (void)
 {
+    pci_unregister_driver(&ohayo_driver);
 	printk(KERN_INFO "sayonara.\n");
 }
 
