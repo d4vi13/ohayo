@@ -38,54 +38,54 @@ ohayo_mmio_write(void *opaque, hwaddr addr, uint64_t val, unsigned size)
         dev->r0 = val;
 }
 
-// mais info em include/system/memory.h
+
+/* /include/system/memory.h 
+ * valid = {0}: permite acessos de tamanhos arbitrários
+ * impl.min_access_size = 4: acessos menores que 4 bytes são arredondados para 4 bytes
+ * impl.max_access_size = 4: acessos maiores que 4 bytes são divididos em múltiplos de 4 bytes
+ */
 const MemoryRegionOps ohayo_mmio_ops = {
     .read = ohayo_mmio_read,
     .write = ohayo_mmio_write,
-
     .endianness = DEVICE_NATIVE_ENDIAN,
-
-    // valid zerado para permitir acessos de tamanhos arbitrarios
     .valid  = {0},
-
-    // abaixo forca todos os acessos serem divididos em 4 bytes
     .impl = {
-        .min_access_size = 4, // smaller acesses are rounded up (not sure what that means yet) 
-        .max_access_size = 4, // bigger acesses are split into smaller acesses 
+        .min_access_size = 4,
+        .max_access_size = 4,
     }
 };
 
-static void
-memory_setup (PCIDevice *pdev)
+/* 
+ * Inicializa a região de memória MMIO e associa ao BAR do dispositivo PCI
+ * memory_region_init_io: reserva uma região de 4 KB do "espaço físico" emulado
+ * pci_register_bar: associa essa região de memória ao BAR 0 do dispositivo PCI
+ */
+    static void
+memory_setup (struct ohayo_state *ohayo_state)
 {
-    struct ohayo_state *ohayo_state = OHAYO_STATE(pdev);
-   /* essencialmente reserva uma regiao de 4kb
-    * do espaco de enderecamento "fisico"(mentirinha pq eh emulado)
-    */
-   memory_region_init_io (
-           &ohayo_state->mmio,
-           OBJECT (ohayo_state),
-           &ohayo_mmio_ops, 
-           ohayo_state,
-           "ohayo-mmio",
-           0x1000
-           );
+    memory_region_init_io(
+            &ohayo_state->mmio,
+            OBJECT(ohayo_state),
+            &ohayo_mmio_ops, 
+            ohayo_state,
+            "ohayo-mmio",
+            0x1000
+            );
 
-   /* associa regiao de memoria inicializada acima
-    * ao bar do dispositivo pci recem plugado
-    */
-   pci_register_bar (
-           &ohayo_state->pdev,
-           0,
-           PCI_BASE_ADDRESS_SPACE_MEMORY,
-           &ohayo_state->mmio
-           );
+    pci_register_bar(
+            &ohayo_state->pdev,
+            0,
+            PCI_BASE_ADDRESS_SPACE_MEMORY,
+            &ohayo_state->mmio
+            );
 }
+
 
 static void
 ohayo_realize (PCIDevice *pdev, Error **errp)
 {
-    memory_setup (pdev);
+    struct ohayo_state *ohayo_state = OHAYO_STATE(pdev);
+    memory_setup (ohayo_state);
     return;
 }
 
