@@ -1,2 +1,8 @@
-system_ss.add(when: 'CONFIG_OHAYO', if_true: files('ohayo.c'))
+ohayo_ss = ss.source_set()
+ohayo_ss.add(files(
+  'ohayo.c',
+  'mmio.c',
+))
+
+system_ss.add_all(when: 'CONFIG_OHAYO', if_true: ohayo_ss)
 

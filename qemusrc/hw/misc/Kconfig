@@ -241,4 +241,3 @@ config XLNX_VERSAL_TRNG
     bool
 
 source macio/Kconfig
-source ohayo/Kconfig
