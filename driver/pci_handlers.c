@@ -47,6 +47,7 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
   writel (0x0b0b, ctrl->mmio);
   printk (KERN_INFO "valor lido %x\n", readl(ctrl->mmio));
+  printk (KERN_INFO "valor lido %x\n", readl(ctrl->mmio+4));
 
   return 0;
 }
@@ -54,6 +55,12 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
 void 
 ohayo_remove(struct pci_dev *dev)
 {
+  if (!ctrl->mmio)
+    pci_iounmap (dev, ctrl->mmio);
+
+  pci_disable_device (dev);
+  pci_release_region (dev, 0);
+
   return;
 }
 
