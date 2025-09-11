@@ -33,6 +33,21 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
   printk(KERN_INFO "memory reserved\n");
 
+  /* Cria cookie da regiao mapeada.
+   * Essencialmente eh uma estrutura opaca
+   * que representa nosso bar mapeado em uma
+   * regiao de memoria virtual
+   */
+  ctrl->mmio = pci_iomap (dev, 0, 0x1000);
+  if (!ctrl->mmio)
+    {
+      dev_err (&dev->dev,"unable to memory map pci bar\n");
+      return -ENOMEM;
+    }
+
+  writel (0x0b0b, ctrl->mmio);
+  printk (KERN_INFO "valor lido %x\n", readl(ctrl->mmio));
+
   return 0;
 }
 
