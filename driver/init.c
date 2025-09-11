@@ -2,7 +2,7 @@
 
 // ohayo_ctrl ----------------------------------------------------------
 
-struct ohayo_ctrl*
+static inline struct ohayo_ctrl*
 alloc_ohayo_ctrl (void) 
 {
   struct ohayo_ctrl *ctrl =  kzalloc (sizeof * ctrl, GFP_KERNEL); 
@@ -12,7 +12,7 @@ alloc_ohayo_ctrl (void)
   return ctrl;
 }
 
-void
+static inline void
 init_ohayo_ctrl (struct ohayo_ctrl *ctrl) 
 {
   ctrl->pci_driver.name = DRIVER_NAME;
