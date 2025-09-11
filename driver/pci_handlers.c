@@ -3,6 +3,7 @@
 static inline int 
 memory_setup (struct pci_dev *dev)
 {
+  int err;
   /* Marca regiao como sendo utilizada dentro do kernel*/
   err = pci_request_region (dev, 0, DRIVER_NAME);
   if (err < 0) 
