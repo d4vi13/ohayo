@@ -10,7 +10,9 @@
 
 struct ohayo_ctrl {
   struct pci_driver pci_driver;
+  struct file_operations fops;
   void __iomem *mmio; // __iomem marca a regiao de memoria como mmio para checagem estatica
+  int major;
 };
 
 extern struct ohayo_ctrl *ctrl;

@@ -7,7 +7,10 @@ alloc_ohayo_ctrl (void)
 {
   struct ohayo_ctrl *ctrl =  kzalloc (sizeof * ctrl, GFP_KERNEL); 
   if (!ctrl)
-    pr_err ("kernel allocation failed\n");
+    {
+      pr_err ("failed to allocate ohayo ctrl structure\n");
+      return NULL;
+    }
 
   return ctrl;
 }
@@ -15,10 +18,21 @@ alloc_ohayo_ctrl (void)
 static inline void
 init_ohayo_ctrl (struct ohayo_ctrl *ctrl) 
 {
+  /* init struct pci_driver */
   ctrl->pci_driver.name = DRIVER_NAME;
   ctrl->pci_driver.id_table = ohayo_ids;
   ctrl->pci_driver.probe = ohayo_probe;
   ctrl->pci_driver.remove = ohayo_remove;
+
+  /* init struct file_operations */
+  ctrl->fops.write = ohayo_write;
+  ctrl->fops.read = ohayo_read;
+
+  /* Use unlocked because the old
+   * ioctl was fazed because it used
+   * the BKL
+   */
+  ctrl->fops.unlocked_ioctl = ohayo_ioctl; 
 }
 
 struct ohayo_ctrl*

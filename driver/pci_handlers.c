@@ -38,6 +38,8 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
 {
   int err = 0;
 
+  ctrl->major = register_chrdev (0, "ohayo", &ctrl->fops);
+
   /* Nesse ponto o BAR deve ter um endereco valido 
    * alocado anteriormente pelo kernel apos ter feito
    * a enumeracao dos barramentos 

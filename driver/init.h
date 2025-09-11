@@ -3,6 +3,7 @@
 
 #include "ohayo.h"
 #include "pci_handlers.h"
+#include "chrdev.h"
 
 struct ohayo_ctrl*
 get_ohayo_ctrl (void);
