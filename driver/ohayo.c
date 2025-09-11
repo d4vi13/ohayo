@@ -1,29 +1,9 @@
-#include <linux/module.h>	
-#include <linux/kernel.h>	
-#include <linux/pci.h>	
+#include "ohayo.h"
+#include "init.h"
 
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("davi c. ribeiro");
-MODULE_DESCRIPTION("ohayo device driver");
+struct ohayo_ctrl *ctrl; 
 
-#define VENDOR_ID 0x0000
-#define OHAYO_DEV_ID 0xcafe
-
-static int 
-ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
-{
-  printk(KERN_INFO "dispositivo carregado\n");
-  printk(KERN_INFO "vendor: %x id: %x\n", id->vendor, id->device);
-  return 0;
-}
-
-static void 
-ohayo_remove(struct pci_dev *dev)
-{
-  return;
-}
-
-static struct pci_device_id ohayo_ids[] = {
+struct pci_device_id ohayo_ids[] = {
   {PCI_DEVICE(VENDOR_ID, OHAYO_DEV_ID), },
   {}
 };
@@ -34,32 +14,30 @@ static struct pci_device_id ohayo_ids[] = {
  */
 MODULE_DEVICE_TABLE(pci, ohayo_ids);
 
-/*
- * id_table - dispositivos compativeis
- * probe - funcao executada ao inserir dispositivo
- */
-static struct pci_driver ohayo_driver = {
-  .name = "ohayo-driver",
-  .id_table = ohayo_ids,
-  .probe = ohayo_probe,
-  .remove = ohayo_remove,
-};
-
 static int __init
 ohayo_init(void)
 {
-  int err = pci_register_driver(&ohayo_driver); 
-  if (err < 0) 
-    printk (KERN_NOTICE "couldnt register ohayo driver\n");
+  int err;
+  ctrl = get_ohayo_ctrl ();
+  if (!ctrl)
+  {
+    pr_err ("unable to get ohayo ctrl structure\n");
+    return -ENOMEM;
+  }
 
-	return err;
+  err = pci_register_driver (&ctrl->pci_driver); 
+  if (err < 0) 
+    pr_err ("couldnt register ohayo driver\n");
+
+  return err;
 }
 
 static void __exit
 ohayo_exit (void)
 {
-    pci_unregister_driver(&ohayo_driver);
-	printk(KERN_INFO "sayonara.\n");
+  pci_unregister_driver (&ctrl->pci_driver);
+  free_ohayo_ctrl (ctrl);
+  printk (KERN_INFO "sayonara.\n");
 }
 
 module_init(ohayo_init);
