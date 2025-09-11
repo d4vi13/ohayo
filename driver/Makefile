@@ -1,4 +1,4 @@
-obj-m += driver.o 
+obj-m += ohayod.o 
 driver-objs += ohayo.o init.o pci_handlers.o
 
 all:
