@@ -17,7 +17,7 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
   err = pci_enable_device(dev); 
   if (err < 0)
   {
-    pr_err ("unable to enable ohayo device\n");
+    dev_err (&dev->dev, "unable to enable ohayo device\n");
     return err;
   }
 
@@ -27,7 +27,7 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
   err = pci_request_region (dev, 0, DRIVER_NAME);
   if (err < 0) 
     {
-      pr_err("requested memory region is busy\n");
+      dev_err (&dev->dev,"requested memory region is busy\n");
       return err;
     }
 
