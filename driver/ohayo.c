@@ -36,7 +36,9 @@ static void __exit
 ohayo_exit (void)
 {
   pci_unregister_driver (&ctrl->pci_driver);
+  unregister_chrdev (ctrl->major, "ohayo");
   free_ohayo_ctrl (ctrl);
+
   printk (KERN_INFO "sayonara.\n");
 }
 
