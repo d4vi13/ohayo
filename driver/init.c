@@ -25,6 +25,7 @@ init_ohayo_ctrl (struct ohayo_ctrl *ctrl)
   ctrl->pci_driver.remove = ohayo_remove;
 
   /* init struct file_operations */
+  ctrl->fops.owner = THIS_MODULE;
   ctrl->fops.write = ohayo_write;
   ctrl->fops.read = ohayo_read;
 
