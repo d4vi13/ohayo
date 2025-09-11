@@ -30,16 +30,18 @@ ohayo_read (struct file *f, char __user *buf, size_t len, loff_t *offset)
 
   printk (KERN_INFO "lendo\n");
 
-  while (len - i > 4) 
+  for (; i < len/4; i++)
     {
       if ((*offset + i) > 0x1000)
+      {
+        pr_err("out of bounds\n");
         break;
+      }
 
-      buffer[i/4] = readl ( ctrl->mmio + *offset + i);
-      i += 4;
+      buffer[i] = readl ( ctrl->mmio + *offset + i);
+      printk (KERN_INFO "valor lido (i=%ull): %x\n", i, buffer[0]);
     }
 
-  printk (KERN_INFO "primeiro elem: %x\n", buffer[0]);
 
   return i;
 }
