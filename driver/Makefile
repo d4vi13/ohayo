@@ -1,5 +1,5 @@
 obj-m += ohayod.o 
-driver-objs += ohayo.o init.o pci_handlers.o
+ohayod-objs += ohayo.o init.o pci_handlers.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
