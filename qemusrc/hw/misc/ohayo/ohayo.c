@@ -23,6 +23,7 @@ ohayo_class_init (ObjectClass *class, const void *data)
 
     k->realize = ohayo_realize;
     k->device_id = 0xcafe;
+    k->class_id = PCI_CLASS_OTHERS;
 }
 
 /*
