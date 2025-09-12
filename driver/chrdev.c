@@ -6,9 +6,6 @@ ohayo_write (struct file *f, const char __user *buf, size_t len, loff_t *offset)
   size_t i = 0;
   u32 *buffer = (u32 *)buf;
 
-  printk (KERN_INFO "escrevendo\n");
-
-
   for (; i < len/4; i++)
     {
       if ((*offset + i) > 0x1000)
@@ -25,8 +22,6 @@ ohayo_read (struct file *f, char __user *buf, size_t len, loff_t *offset)
 {
   size_t i = 0;
   u32 *buffer = (u32 *)buf;
-
-  printk (KERN_INFO "lendo\n");
 
   for (; i < len/4; i++)
     {
