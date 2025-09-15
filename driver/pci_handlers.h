@@ -2,6 +2,7 @@
 #define PCI_HANDLERS
 
 #include "ohayo.h"
+#include "chrdev.h"
 
 int 
 ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id);

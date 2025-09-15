@@ -12,4 +12,7 @@ ohayo_read (struct file *f, char __user *buf, size_t len, loff_t *offset);
 long int 
 ohayo_ioctl (struct file *f, unsigned int ioctl_num, unsigned long ioctl_param);
 
+int 
+init_chrdev (struct device *dev);
+
 #endif 

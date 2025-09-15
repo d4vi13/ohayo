@@ -63,11 +63,11 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
   dev_info (&dev->dev, "memory configured\n");
 
-  ctrl->major = register_chrdev (0, "ohayo", &ctrl->fops);
-  if (ctrl->major < 0)
+  err = init_chrdev (&dev->dev);
+  if (err < 0)
     {
-      dev_err (&dev->dev, "unable to register char device\n");
-      return ctrl->major;
+      dev_err (&dev->dev, "unable to initialize chrdev\n");
+      return err;
     }
 
   dev_info (&dev->dev, "char device registered\n");
