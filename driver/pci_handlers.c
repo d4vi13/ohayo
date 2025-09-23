@@ -81,7 +81,7 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
   dev_info (&dev->dev, "irq initialized\n");
 
-  writel(0x0, 0x10);
+  writel(0x0, ctrl->mmio + 0x10);
 
   return 0;
 }
