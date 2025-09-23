@@ -3,8 +3,8 @@
 static irqreturn_t 
 ohayo_irq_handler (int irq, void *ctrl)
 {
-  pr_info("ohayo gozaimasu\n");_
-  writel(0x0, ohayo_ctrl->mmio + 0x14);
+  pr_info("ohayo gozaimasu\n");
+  writel(0x0, ctrl->mmio + 0x14);
 }
 
 int
@@ -35,7 +35,7 @@ init_irq (struct pci_dev *pdev)
    * talvez ele aponte o offset do interrupt no bloco de 
    * interrupts alocados.
    */
-  err = pci_alloc_vectors (pdev, 0);
+  err = pci_irq_vector (pdev, 0);
   if (err < 0)
     {
       dev_err (&pdev->dev, "unable to retrieve a irq number\n");
@@ -53,3 +53,5 @@ init_irq (struct pci_dev *pdev)
 
   return 0;
 }
+
+
