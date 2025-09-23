@@ -1,10 +1,12 @@
 #include "irq.h"
 
 static irqreturn_t 
-ohayo_irq_handler (int irq, void *ctrl)
+ohayo_irq_handler (int irq, void *ohayo_ctrl)
 {
   pr_info("ohayo gozaimasu\n");
   writel(0x0, ctrl->mmio + 0x14);
+
+  return IRQ_HANDLED;
 }
 
 int
@@ -26,7 +28,7 @@ init_irq (struct pci_dev *pdev)
       return err;
     }
 
-  ohayo_ctrl->allocated_vector_num = err;
+  ctrl->allocated_vector_num = err;
 
   /* isso dara um irq number, ele nao eh uma correspondecia 
    * um pra um da idt, mas sim uma representacao do kernel
@@ -42,9 +44,9 @@ init_irq (struct pci_dev *pdev)
       return err;
     }
 
-  ohayo_ctrl->irq = err;
+  ctrl->irq = err;
 
-  err = request_irq (ohayo_ctrl->irq, ohayo_irq_handler, 0, "ohayo dev", ohayo_ctrl); 
+  err = request_irq (ctrl->irq, ohayo_irq_handler, 0, "ohayo dev", ctrl); 
   if (err < 0)
     {
       dev_err (&pdev->dev, "unable to bind handler to irq number\n");
