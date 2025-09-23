@@ -11,6 +11,18 @@
 #include "qapi/visitor.h"
 
 #define TYPE_OHAYO_DEVICE "ohayo"
+#define REG_NUM 5
+#define MSI_VECTOR_NUMS 1
+
+enum regs {
+  R0,
+  R1, 
+  R2,
+  R3,
+  IRQ_RAISE,
+  IRQ_LOWER,
+  IRQ_STATUS
+};
 
 DECLARE_INSTANCE_CHECKER(struct ohayo_state, OHAYO_STATE, TYPE_OHAYO_DEVICE)
 
@@ -19,7 +31,7 @@ struct ohayo_state
     PCIDevice pdev;
     MemoryRegion mmio;
 
-    uint32_t r0;
+    uint32_t r[REG_NUM];
 };
 
 #endif

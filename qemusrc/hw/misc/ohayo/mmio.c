@@ -5,17 +5,59 @@ ohayo_mmio_read(void *opaque, hwaddr addr, unsigned size)
 {
     struct ohayo_state *dev = opaque;
     uint64_t ret = ~0ULL; // pq todo mundo faz isso?
-    if (addr == 0x0)
-        ret = dev->r0;
+    switch (addr % 4) 
+      {
+        case R0:
+          ret = dev->r[R0];
+          break;
+        case R1:
+          ret = dev->r[R1];
+          break;
+        case R2:
+          ret = dev->r[R2];
+          break;
+        case R3:
+          ret = dev->r[R3];
+          break;
+        case IRQ_STATUS:
+          ret = dev->r[IRQ_STATUS];
+          break;
+        default:
+          break;
+      }
+
     return ret;
 }
 
 static void
-ohayo_mmio_write(void *opaque, hwaddr addr, uint64_t val, unsigned size)
+ohayo_mmio_write(void *opaque, hwaddr addr, uint64_t val64, unsigned size)
 {
     struct ohayo_state *dev = opaque;
-    if (addr == 0x0)
-        dev->r0 = val;
+    uint32_t val = (uint32_t) val64;
+    switch (addr % 4) 
+      {
+        case R0:
+          dev->r[R0] = val;
+          break;
+        case R1:
+          dev->r[R1] = val;
+          break;
+        case R2:
+          dev->r[R2] = val;
+          break;
+        case R3:
+          dev->r[R3] = val;
+          break;
+        case IRQ_RAISE:
+          ohayo_raise (dev, val);
+          break;
+        case IRQ_LOWER:
+          if (ohayo_check_irq_status (val))
+            ohayo_lower (val);
+          break;
+        default:
+          break;
+      }
 }
 
 
