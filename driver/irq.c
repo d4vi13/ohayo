@@ -4,7 +4,7 @@ static irqreturn_t
 ohayo_irq_handler (int irq, void *ohayo_ctrl)
 {
   pr_info("ohayo gozaimasu\n");
-  writel(0x0, ctrl->mmio + 0x14);
+  writel(0x0, ctrl->mmio + 0x18);
 
   return IRQ_HANDLED;
 }

@@ -5,7 +5,7 @@ ohayo_mmio_read(void *opaque, hwaddr addr, unsigned size)
 {
     struct ohayo_state *dev = opaque;
     uint64_t ret = ~0ULL; // pq todo mundo faz isso?
-    switch (addr % 4) 
+    switch (addr / 4) 
       {
         case R0:
           ret = dev->r[R0];
@@ -34,7 +34,7 @@ ohayo_mmio_write(void *opaque, hwaddr addr, uint64_t val64, unsigned size)
 {
     struct ohayo_state *dev = opaque;
     uint32_t val = (uint32_t) val64;
-    switch (addr % 4) 
+    switch (addr / 4) 
       {
         case R0:
           dev->r[R0] = val;

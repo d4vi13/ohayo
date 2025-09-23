@@ -27,6 +27,7 @@ memory_setup (struct pci_dev *dev)
     }
 
   writel (0x0b0b, ctrl->mmio);
+  writel (0x0b1b, ctrl->mmio+4);
   dev_info (&dev->dev, "valor lido %x\n", readl(ctrl->mmio));
   dev_info (&dev->dev, "valor lido %x\n", readl(ctrl->mmio+4));
 
@@ -81,7 +82,7 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
   dev_info (&dev->dev, "irq initialized\n");
 
-  writel(0x0, ctrl->mmio + 0x10);
+  writel(0x0, ctrl->mmio + 0x14);
 
   return 0;
 }
