@@ -52,8 +52,8 @@ ohayo_mmio_write(void *opaque, hwaddr addr, uint64_t val64, unsigned size)
           ohayo_raise (dev, val);
           break;
         case IRQ_LOWER:
-          if (ohayo_check_irq_status (val))
-            ohayo_lower (val);
+          if (ohayo_check_irq_status (dev, val))
+            ohayo_lower (dev, val);
           break;
         default:
           break;

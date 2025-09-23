@@ -19,9 +19,10 @@ enum regs {
   R1, 
   R2,
   R3,
+  IRQ_STATUS,
+  // non registers
   IRQ_RAISE,
-  IRQ_LOWER,
-  IRQ_STATUS
+  IRQ_LOWER
 };
 
 DECLARE_INSTANCE_CHECKER(struct ohayo_state, OHAYO_STATE, TYPE_OHAYO_DEVICE)

@@ -13,16 +13,18 @@ enable_msi (PCIDevice *pdev, Error **errp)
    * true - usa enderecos de 64 bits
    * false - num entendi ainda
    */
-  err = msi_init (pdev, 0, MSI_VECTOR_NUMS, true. false , errp);
+  err = msi_init (pdev, 0, MSI_VECTOR_NUMS, true, false , errp);
   if (err < 0)
     return err;
+
+  return 0;
 }
 
 void 
 ohayo_raise (struct ohayo_state *ohayo_state, uint32_t vector) 
 {
-  PCIDevice pdev = (PCIDevice*) ohayo_state;
   ohayo_state->r[IRQ_STATUS] |= (1 << vector);
+  PCIDevice *pdev = (PCIDevice*) ohayo_state;
   if (msi_enabled (pdev))
     msi_notify (pdev, vector); 
 
@@ -30,7 +32,7 @@ ohayo_raise (struct ohayo_state *ohayo_state, uint32_t vector)
 } 
 
 void 
-ohayo_lower (uint32_t vector) 
+ohayo_lower (struct ohayo_state *ohayo_state, uint32_t vector) 
 {
   ohayo_state->r[IRQ_STATUS] &= ~(1 << vector);
 
@@ -38,9 +40,9 @@ ohayo_lower (uint32_t vector)
 }
 
 bool
-ohayo_check_irq_status (uint32_t vector)
+ohayo_check_irq_status (struct ohayo_state *ohayo_state, uint32_t vector)
 {
-  return (((1 << vector) & ohayo->r[IRQ_STATUS]) != 0);
+  return (((1 << vector) & ohayo_state->r[IRQ_STATUS]) != 0);
 }
 
 

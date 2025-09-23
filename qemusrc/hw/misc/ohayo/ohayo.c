@@ -1,11 +1,13 @@
 #include "hw/misc/ohayo/ohayo.h"
 #include "hw/misc/ohayo/mmio.h"
+#include "hw/misc/ohayo/irq.h"
 
 static void
 ohayo_realize (PCIDevice *pdev, Error **errp)
 {
     struct ohayo_state *ohayo_state = OHAYO_STATE(pdev);
     memory_setup (ohayo_state);
+    enable_msi(pdev, errp);
     return;
 }
 
