@@ -3,6 +3,7 @@
 
 #include "ohayo.h"
 #include "chrdev.h"
+#include "irq.h"
 
 int 
 ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id);

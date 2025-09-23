@@ -20,6 +20,11 @@ struct ohayo_ctrl {
   struct device *dev; 
   int major;
   dev_t dev_num; //major + minor encoding
+
+  // irq
+ 
+  int allocated_vector_num; // numero de vetor alocados para o msi 
+  int irq; 
 };
 
 extern struct ohayo_ctrl *ctrl;

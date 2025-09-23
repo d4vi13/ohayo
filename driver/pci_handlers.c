@@ -71,6 +71,18 @@ ohayo_probe(struct pci_dev *dev, const struct pci_device_id *id)
     }
 
   dev_info (&dev->dev, "char device registered\n");
+
+  err = init_irq (dev);
+  if (err < 0)
+    {
+      dev_err (&dev->dev, "unable to initialize irq\n");
+      return err;
+    }
+
+  dev_info (&dev->dev, "irq initialized\n");
+
+  writel(0x0, 0x10);
+
   return 0;
 }
 
