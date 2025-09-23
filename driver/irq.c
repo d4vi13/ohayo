@@ -27,7 +27,8 @@ init_irq (struct pci_dev *pdev)
       dev_err (&pdev->dev, "unable to allocate msi vectors\n");
       return err;
     }
-
+  
+  dev_info (&pdev->dev, "allocated vector num %d\n", err);
   ctrl->allocated_vector_num = err;
 
   /* isso dara um irq number, ele nao eh uma correspondecia 
@@ -45,6 +46,7 @@ init_irq (struct pci_dev *pdev)
     }
 
   ctrl->irq = err;
+  dev_info (&pdev->dev, "irq num %d\n", ctrl->irq);
 
   err = request_irq (ctrl->irq, ohayo_irq_handler, 0, "ohayo dev", ctrl); 
   if (err < 0)
@@ -52,6 +54,8 @@ init_irq (struct pci_dev *pdev)
       dev_err (&pdev->dev, "unable to bind handler to irq number\n");
       return err;
     }
+
+  dev_info (&pdev->dev, "request irq %d\n", err);
 
   return 0;
 }
